@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Twitter Clone - Login</title>
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#15202b;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card {
+  background:#192734;
+  padding:40px;
+  border-radius:12px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+h1 { color:#1da1f2; margin-bottom:20px; }
+input {
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:none;
+  border-radius:6px;
+}
+button {
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+  background:#1da1f2;
+  color:white;
+  cursor:pointer;
+}
+button:hover { background:#1991da; }
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h1>Twitter</h1>
+
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBIXN7CLZeZ2hcMnT3-DE-KmUBMAciQxC4",
+  authDomain: "a2-3211471.firebaseapp.com",
+  projectId: "a2-3211471"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ✅ FIX: ensure elements exist after DOM loads
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+
+window.login = async () => {
+  try {
+    const user = await signInWithEmailAndPassword(
+      auth,
+      emailInput.value,
+      passwordInput.value
+    );
+
+    localStorage.setItem("uid", user.user.uid);
+
+    const res = await fetch(`/check-user/${user.user.uid}`);
+    const data = await res.json();
+
+    window.location = data.exists ? "/feed" : "/username";
+
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+window.register = async () => {
+  try {
+    await createUserWithEmailAndPassword(
+      auth,
+      emailInput.value,
+      passwordInput.value
+    );
+    alert("Registered! Now login.");
+  } catch (e) {
+    alert(e.message);
+  }
+};
+</script>
+</body>
+</html>
