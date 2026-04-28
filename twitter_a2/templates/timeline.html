@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  margin:0;
+  background:#15202b;
+  color:white;
+  font-family:Arial;
+}
+
+.container {
+  width:500px;
+  margin:30px auto;
+}
+
+h2 {
+  color:#1da1f2;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.tweet {
+  background:#192734;
+  padding:15px;
+  margin-top:12px;
+  border-radius:12px;
+  box-shadow:0 0 8px rgba(0,0,0,0.3);
+  transition:0.2s;
+}
+
+.tweet:hover {
+  transform:scale(1.01);
+}
+
+.header {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.profile-pic {
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #1da1f2;
+}
+
+.username {
+  color:#1da1f2;
+  font-weight:bold;
+}
+
+.content {
+  margin-top:10px;
+  line-height:1.4;
+}
+
+button {
+  margin-top:10px;
+  padding:8px 12px;
+  background:#1da1f2;
+  border:none;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover {
+  background:#1991da;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Your Timeline</h2>
+
+<div id="timeline">
+
+{% for t in tweets %}
+<div class="tweet">
+
+  <div class="header">
+    <!-- PROFILE PIC -->
+    <img class="profile-pic"
+         src="{{ t.profile_pic if t.profile_pic else '/static/default.png' }}">
+
+    <div class="username">{{ t.username }}</div>
+  </div>
+
+  <div class="content">{{ t.content }}</div>
+
+  <a href="/edit-tweet/{{ t._id }}">
+    <button>Edit</button>
+  </a>
+
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+<script>
+
+setInterval(() => {
+  location.reload();
+}, 10000);
+</script>
+
+</body>
+</html>

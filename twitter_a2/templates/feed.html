@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Twitter Clone</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #1DA1F2;
+  --primary-dark: #1a91da;
+  --primary-light: #3EAFF5;
+  --bg-primary: #0F1419;
+  --bg-secondary: #16202B;
+  --bg-tertiary: #192734;
+  --bg-hover: #1E2A37;
+  --text-primary: #E7E9EA;
+  --text-secondary: #71767B;
+  --text-tertiary: #536471;
+  --border-color: #2F3336;
+  --accent: #F91880;
+  --success: #17BF63;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  letter-spacing: -0.3px;
+}
+
+/* NAV BAR */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 20, 25, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav h2 {
+  color: var(--primary);
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+/* BUTTONS */
+button {
+  padding: 12px 28px;
+  background: var(--primary);
+  border: none;
+  color: white;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: -0.3px;
+  box-shadow: var(--shadow-sm);
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.logout-btn {
+  background: linear-gradient(135deg, var(--accent) 0%, #FF4081 100%);
+}
+
+/* CONTAINER */
+.container {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* SEARCH BOX */
+.search-box {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-box:hover {
+  border-color: var(--primary);
+  background: var(--bg-tertiary);
+  box-shadow: var(--shadow-md);
+}
+
+.search-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+  background: var(--bg-tertiary);
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 24px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+input[type="text"]::placeholder {
+  color: var(--text-tertiary);
+}
+
+input[type="text"]:focus {
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+}
+
+.search-btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  min-width: 90px;
+  font-weight: 700;
+}
+
+/* RESULTS CONTAINER */
+.results {
+  display: none;
+  position: absolute;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin-top: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 50;
+  min-width: 220px;
+  animation: slideDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-lg);
+}
+
+.results.active {
+  display: block;
+}
+
+.result-item {
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-item:hover {
+  background: var(--bg-hover);
+  padding-left: 22px;
+}
+
+/* TWEET BOX */
+.tweet-box {
+  background: var(--bg-secondary);
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.tweet-box:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+textarea {
+  width: 100%;
+  height: 110px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+  background: var(--bg-secondary);
+}
+
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.tweet-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+input[type="file"] {
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.file-label {
+  cursor: pointer;
+  padding: 10px 18px;
+  color: var(--primary);
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.file-label:hover {
+  background: rgba(29, 161, 242, 0.12);
+}
+
+.tweet-box button {
+  margin-left: auto;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* TWEETS FEED */
+#tweets {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* TWEET */
+.tweet {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: slideInFromLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tweet:hover {
+  border-color: var(--primary);
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* TWEET HEADER */
+.tweet-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.tweet-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.tweet-header:hover .tweet-avatar {
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+.tweet-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.username {
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: color 0.2s ease;
+  display: inline-block;
+}
+
+.username:hover {
+  color: var(--primary);
+}
+
+.retweet-info {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* TWEET CONTENT */
+.tweet-content {
+  margin: 12px 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  font-weight: 500;
+}
+
+/* TWEET IMAGE */
+.tweet-image {
+  width: 100%;
+  margin: 14px 0 0 0;
+  border-radius: 16px;
+  object-fit: cover;
+  max-height: 420px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.tweet-image:hover {
+  filter: brightness(0.95);
+  border-color: var(--primary);
+}
+
+/* TWEET TIME */
+.tweet-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 14px 0 12px 0;
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+.tweet-time:hover {
+  color: var(--primary);
+}
+
+/* TWEET ACTIONS */
+.tweet-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tweet-actions button,
+.tweet-actions a button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  width: auto;
+  font-weight: 600;
+}
+
+.tweet-actions button:hover,
+.tweet-actions a button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(29, 161, 242, 0.1);
+  transform: translateY(-1px);
+}
+
+.tweet-actions form {
+  display: contents;
+}
+
+.tweet-actions input[type="hidden"] {
+  display: none;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+  border: 3px solid var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav {
+    padding: 14px 16px;
+  }
+
+  .nav h2 {
+    font-size: 26px;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  .tweet {
+    padding: 14px;
+  }
+
+  .tweet-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  textarea {
+    font-size: 17px;
+    height: 90px;
+  }
+
+  .search-box {
+    flex-wrap: wrap;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  button {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+}
+
+/* UTILITY */
+input[type="hidden"] {
+  display: none;
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <h2>Twitter Clone</h2>
+  <div class="nav-buttons">
+    <button onclick="goTimeline()">Timeline</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+  <!-- USER SEARCH -->
+  <div class="search-box">
+    <input type="text" id="userSearch" placeholder="Search username...">
+    <button class="search-btn" onclick="searchUser()">Search</button>
+    <div id="userResults" class="results"></div>
+  </div>
+
+  <!-- TWEET SEARCH -->
+  <div class="search-box">
+    <input type="text" id="tweetSearch" placeholder="Search tweets...">
+    <button class="search-btn" onclick="searchTweet()">Search</button>
+    <div id="tweetResults" class="results"></div>
+  </div>
+
+  <!-- TWEET COMPOSITION BOX -->
+  <div class="tweet-box">
+    <textarea id="content" maxlength="280" placeholder="What's happening?!"></textarea>
+    <div class="tweet-controls">
+      <label class="file-label" for="image">
+        Attach Image
+      </label>
+      <input type="file" id="image" accept="image/*">
+      <button onclick="tweet()">Post</button>
+    </div>
+  </div>
+
+  <!-- TWEETS FEED -->
+  <div id="tweets">
+    {% for t in tweets %}
+    <div class="tweet">
+
+      <!-- TWEET HEADER -->
+      <div class="tweet-header">
+        <img src="{{ t.profile_pic if t.profile_pic else '/static/default.png' }}"
+             alt="{{ t.username }}" class="tweet-avatar">
+        <div class="tweet-info">
+          <div class="username" onclick="goProfile('{{ t.username }}')">
+            {{ t.username if t.username else "unknown" }}
+          </div>
+          {% if t.retweet %}
+          <div class="retweet-info">
+            {{ t.retweet_by if t.retweet_by else "unknown" }} retweeted {{ t.original_username if t.original_username else "unknown" }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- TWEET CONTENT -->
+      <div class="tweet-content">
+        {{ t.content }}
+      </div>
+
+      <!-- TWEET IMAGE -->
+      {% if t.image %}
+      <img src="{{ t.image }}" alt="Tweet image" class="tweet-image">
+      {% endif %}
+
+      <!-- TWEET TIME -->
+      {% if t.created_at %}
+      <div class="tweet-time">
+        {{ t.created_at }}
+      </div>
+      {% endif %}
+
+      <!-- TWEET ACTIONS -->
+      <div class="tweet-actions">
+        {% if t.user_id == request.query_params.get('uid') %}
+        <a href="/edit-tweet/{{ t._id }}">
+          <button>Edit</button>
+        </a>
+        {% endif %}
+
+        <form action="/delete-tweet" method="post">
+          <input type="hidden" name="tweet_id" value="{{ t._id }}">
+          <button type="submit">Delete</button>
+        </form>
+
+        <form action="/retweet" method="post">
+          <input type="hidden" name="user_id" class="uid-input">
+          <input type="hidden" name="tweet_id" value="{{ t._id }}">
+          <button type="submit">Retweet</button>
+        </form>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+// TWEET POSTING
+async function tweet() {
+  const content = document.getElementById("content").value;
+  const uid = localStorage.getItem("uid");
+  const file = document.getElementById("image").files[0];
+
+  if (!content.trim()) {
+    alert("Write something!");
+    return;
+  }
+
+  const form = new FormData();
+  form.append("user_id", uid);
+  form.append("content", content);
+  if (file) {
+    form.append("file", file);
+  }
+
+  try {
+    const response = await fetch("/tweet-with-image", {
+      method: "POST",
+      body: form
+    });
+
+    if (response.ok) {
+      document.getElementById("content").value = "";
+      document.getElementById("image").value = "";
+      location.reload();
+    }
+  } catch (error) {
+    console.error("Error posting tweet:", error);
+  }
+}
+
+// USER SEARCH
+async function searchUser() {
+  const q = document.getElementById("userSearch").value;
+  if (!q.trim()) return;
+
+  try {
+    const res = await fetch(`/search-user?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const div = document.getElementById("userResults");
+    div.innerHTML = "";
+
+    if (data.length > 0) {
+      div.classList.add("active");
+      data.forEach(u => {
+        const item = document.createElement("div");
+        item.className = "result-item";
+        item.textContent = u.username;
+        item.onclick = () => goProfile(u.username);
+        div.appendChild(item);
+      });
+    } else {
+      div.classList.remove("active");
+    }
+  } catch (error) {
+    console.error("Error searching users:", error);
+  }
+}
+
+// TWEET SEARCH
+async function searchTweet() {
+  const q = document.getElementById("tweetSearch").value;
+  if (!q.trim()) return;
+
+  try {
+    const res = await fetch(`/search-tweet?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const div = document.getElementById("tweetResults");
+    div.innerHTML = "";
+
+    if (data.length > 0) {
+      div.classList.add("active");
+      data.forEach(t => {
+        const item = document.createElement("div");
+        item.className = "result-item";
+        item.textContent = t.content.substring(0, 50) + "...";
+        div.appendChild(item);
+      });
+    } else {
+      div.classList.remove("active");
+    }
+  } catch (error) {
+    console.error("Error searching tweets:", error);
+  }
+}
+
+// NAVIGATION
+function goProfile(username) {
+  window.location = `/profile/${encodeURIComponent(username)}`;
+}
+
+function goTimeline() {
+  const uid = localStorage.getItem("uid");
+  if (uid) {
+    window.location = `/timeline?uid=${uid}`;
+  } else {
+    window.location = "/";
+  }
+}
+
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    localStorage.removeItem("uid");
+    window.location = "/";
+  }
+}
+
+// INITIALIZE
+window.addEventListener("DOMContentLoaded", () => {
+  const uid = localStorage.getItem("uid");
+  document.querySelectorAll(".uid-input").forEach(i => i.value = uid || "");
+});
+
+// SEARCH INPUT LISTENERS
+document.getElementById("userSearch")?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") searchUser();
+});
+
+document.getElementById("tweetSearch")?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") searchTweet();
+});
+
+// CLOSE RESULTS WHEN CLICKING ELSEWHERE
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".search-box")) {
+    document.getElementById("userResults").classList.remove("active");
+    document.getElementById("tweetResults").classList.remove("active");
+  }
+});
+
+</script>
+
+</body>
+</html>

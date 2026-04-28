@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Set Username</title>
+<style>
+body {
+  background:#15202b;
+  color:white;
+  font-family:Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+.card {
+  background:#192734;
+  padding:35px 30px;
+  border-radius:15px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+h2 {
+  color:#1da1f2;
+  margin-bottom:10px;
+}
+
+input {
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  border:none;
+  border-radius:8px;
+  outline:none;
+  background:#22303c;
+  color:white;
+}
+
+input::placeholder {
+  color:#8899a6;
+}
+
+button {
+  margin-top:18px;
+  padding:12px;
+  width:100%;
+  background:#1da1f2;
+  border:none;
+  color:white;
+  border-radius:25px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.2s;
+}
+
+button:hover {
+  background:#1991da;
+}
+
+.error {
+  color:#ff6b6b;
+  margin-top:10px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Choose Username</h2>
+
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="/set-username">
+    <input type="hidden" name="firebase_uid" id="uid">
+    <input name="username" placeholder="Username" required>
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<script>
+document.getElementById("uid").value = localStorage.getItem("uid");
+</script>
+
+</body>
+</html>

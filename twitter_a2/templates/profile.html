@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root {
+  --primary: #1DA1F2;
+  --primary-dark: #1a91da;
+  --primary-light: #3EAFF5;
+  --bg-primary: #0F1419;
+  --bg-secondary: #16202B;
+  --bg-tertiary: #192734;
+  --bg-hover: #1E2A37;
+  --text-primary: #E7E9EA;
+  --text-secondary: #71767B;
+  --text-tertiary: #536471;
+  --border-color: #2F3336;
+  --accent: #F91880;
+  --success: #17BF63;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  letter-spacing: -0.3px;
+}
+/* NAV */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 20, 25, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nav h2 {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-buttons { display: flex; gap: 16px; }
+/* BUTTONS */
+button {
+  padding: 12px 28px;
+  background: var(--primary);
+  border: none;
+  color: white;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: -0.3px;
+  box-shadow: var(--shadow-sm);
+}
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+button:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+button:hover::before { width: 300px; height: 300px; }
+button:active { transform: translateY(0); }
+/* CONTAINER */
+.container { max-width: 620px; margin: 0 auto; padding: 24px; }
+/* PROFILE CARD */
+.profile {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.profile:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+.profile img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 4px rgba(29, 161, 242, 0.15);
+}
+.profile img:hover { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(29, 161, 242, 0.2); }
+.profile h2 {
+  margin-top: 14px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+#bioDisplay {
+  margin: 10px 0 20px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+/* BIO FORM */
+.profile form { margin-bottom: 12px; }
+.profile textarea {
+  width: 100%;
+  height: 90px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.profile textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+  background: var(--bg-secondary);
+}
+.profile textarea::placeholder { color: var(--text-tertiary); }
+#bioError {
+  font-size: 13px;
+  color: var(--accent);
+  margin: -4px 0 10px;
+  font-weight: 500;
+  min-height: 18px;
+}
+/* PROFILE ACTIONS */
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.profile-actions button { padding: 10px 22px; font-size: 14px; font-weight: 700; }
+.btn-unfollow {
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+.btn-unfollow:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  background: rgba(249, 24, 128, 0.1) !important;
+}
+/* FILE INPUT */
+input[type="file"] {
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  margin: 8px 0;
+}
+/* TWEETS SECTION */
+.tweets-header {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+/* TWEET */
+.tweet {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: slideInFromLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes slideInFromLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.tweet:hover {
+  border-color: var(--primary);
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.tweet-content {
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.tweet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.tweet-actions button,
+.tweet-actions a button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+.tweet-actions button:hover,
+.tweet-actions a button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(29, 161, 242, 0.1);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+.tweet-actions form { display: contents; }
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 5px; border: 3px solid var(--bg-primary); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav { padding: 14px 16px; }
+  .nav h2 { font-size: 26px; }
+  .container { padding: 16px; }
+  .profile { padding: 24px 16px; }
+  button { padding: 10px 20px; font-size: 14px; }
+}
+input[type="hidden"] { display: none; }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <h2>Twitter Clone</h2>
+  <div class="nav-buttons">
+    <button onclick="history.back()">Back</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+  <!-- PROFILE CARD -->
+  <div class="profile">
+
+    <!-- PROFILE IMAGE -->
+    <img src="{{ user.profile_pic if user.profile_pic else '/static/default.png' }}" alt="{{ user.username }}">
+
+    <!-- USERNAME -->
+    <h2>{{ user.username }}</h2>
+
+    <!-- BIO DISPLAY -->
+    <p id="bioDisplay">
+      {% if user.bio %}
+        {{ user.bio }}
+      {% else %}
+        <span style="color:var(--text-tertiary);">No bio yet</span>
+      {% endif %}
+    </p>
+
+    <!-- BIO FORM -->
+    <form action="/update-bio" method="post" onsubmit="return validateBio()">
+      <input type="hidden" name="user_id" id="bio_user">
+      <textarea id="bioText" name="bio" maxlength="280" placeholder="Write your bio...">{{ user.bio }}</textarea>
+      <button type="submit">Save Bio</button>
+    </form>
+
+    <!-- ERROR MESSAGE -->
+    <p id="bioError"></p>
+
+    <!-- FOLLOW / UNFOLLOW -->
+    <div class="profile-actions">
+      <form action="/follow" method="post">
+        <input type="hidden" name="me">
+        <input type="hidden" name="target" value="{{ user.firebase_uid }}">
+        <button type="submit">Follow</button>
+      </form>
+      <form action="/unfollow" method="post">
+        <input type="hidden" name="me">
+        <input type="hidden" name="target" value="{{ user.firebase_uid }}">
+        <button type="submit" class="btn-unfollow">Unfollow</button>
+      </form>
+    </div>
+
+    <!-- UPLOAD IMAGE -->
+    <form action="/upload-profile" method="post" enctype="multipart/form-data" style="margin-top:16px;">
+      <input type="hidden" name="user_id" id="user_id">
+      <input type="file" name="file" accept="image/png, image/jpeg" required>
+      <button type="submit" style="margin-top:10px;">Upload Profile Picture</button>
+    </form>
+
+  </div>
+
+  <!-- TWEETS -->
+  <div class="tweets-header">Latest Tweets</div>
+
+  {% for t in tweets %}
+  <div class="tweet">
+    <div class="tweet-content">{{ t.content }}</div>
+    <div class="tweet-actions">
+      <a href="/edit-tweet/{{ t._id }}">
+        <button>Edit</button>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+const uid = localStorage.getItem("uid");
+
+// follow/unfollow
+document.querySelectorAll("input[name='me']").forEach(i => i.value = uid);
+
+// upload user id
+const userInput = document.getElementById("user_id");
+if (userInput) userInput.value = uid;
+
+const bioInput = document.getElementById("bio_user");
+if (bioInput) bioInput.value = uid;
+
+// BIO VALIDATION
+function validateBio() {
+  const bio = document.getElementById("bioText").value.trim();
+  const error = document.getElementById("bioError");
+  if (!bio) {
+    error.innerText = "Bio cannot be empty!";
+    return false;
+  }
+  error.innerText = "";
+  return true;
+}
+</script>
+</body>
+</html>
