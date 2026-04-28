@@ -295,7 +295,6 @@ def delete_tweet(tweet_id: str = Form(...)):
 
     return RedirectResponse("/feed", status_code=303)
 
-
 # =========================
 #  CREATE TWEET WITH IMAGE
 # =========================
@@ -390,6 +389,7 @@ def retweet(user_id: str = Form(...), tweet_id: str = Form(...)):
     })
 
     return RedirectResponse("/feed", status_code=303)
+    
 
 # =========================
 # RUN
